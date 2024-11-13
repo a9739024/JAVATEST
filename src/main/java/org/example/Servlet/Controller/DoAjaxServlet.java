@@ -1,5 +1,7 @@
 package org.example.Servlet.Controller;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import java.io.PrintWriter;
@@ -19,8 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
-
-//import org.json.JSONObject;
 
 @WebServlet(urlPatterns = {"/doAjaxServlet.do"})
 public class DoAjaxServlet extends HttpServlet {
@@ -42,9 +42,9 @@ public class DoAjaxServlet extends HttpServlet {
         ArrayList userInterestList = new ArrayList();
         userInterestList.addAll(Arrays.asList(arrayUserInterest));
         userInfoMap.put("userInterest", userInterestList);
-//        JSONObject responseJSONObject = new JSONObject(userInfoMap);
-//        PrintWriter out = response.getWriter();
-//        out.println(responseJSONObject);
+        JSONObject responseJSONObject = new JSONObject(userInfoMap);
+        PrintWriter out = response.getWriter();
+        out.println(responseJSONObject);
 
     }
 
