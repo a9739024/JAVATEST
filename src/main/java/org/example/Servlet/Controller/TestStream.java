@@ -1,9 +1,6 @@
 package org.example.Servlet.Controller;
 
-import org.example.Servlet.Models.Employee;
-import org.example.Servlet.Models.ShangHu;
-import org.example.Servlet.Models.Trader;
-import org.example.Servlet.Models.Transaction;
+import org.example.Servlet.Models.*;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -299,6 +296,38 @@ public class TestStream {
         double average = doubles.stream().mapToDouble(x->x).average().getAsDouble();
         System.out.println("max:"+max+" min:"+min+" sumDouble:"+ sumDouble+" average:"+ average);
 
+        //定义一个集合，并添加一些整数1,2,3,4,5,6,7,8,9,10，过滤奇数，只留下偶数
+        List<Integer> numbers = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+        List<Integer> gn = numbers.stream().filter(x->x % 2 == 0).collect(Collectors.toList());
+        System.out.println("gn:" + gn);
+
+        //创建一个ArrayList集合，并添加以下字符串，字符串中前面是姓名，后面是年龄
+        //"zhangsan，23"|"lisi，24"|"wangwu，25"
+        //保留年龄大于等于24岁的人，并将结果收集到Map集合中，姓名为键，年龄为值
+        List<String> nameString = Arrays.asList("zhangsan，23","lisi，24","wangwu，25");
+        Map<String,Integer> users = nameString.stream().filter(x-> Integer.valueOf(x.split("，")[1]) >= 24)
+                .collect(Collectors.toMap(x->x.split("，")[0],y->Integer.valueOf(y.split("，")[1])));
+        System.out.println("users:" + users);
+
+        //现在有两个ArrayList集合，
+        //第一个集合中:存储6名男演员的名字和年龄。第二个集合中:存储6名女演员的名字和年龄。
+        //姓名和年龄中间用逗号隔开。比如:张三,23要求完成如下的操作:
+        //1，男演员只要名字为3个字的前两人2，女演员只要姓杨的，并且不要第一个
+        //3，把过滤后的男演员姓名和女演员姓名合并到一起4，将上一步的演员信息封装成Actor对象。
+        //5，将所有的演员对象都保存到List集合中。
+        //备注:演员类Actor，属性只有一个: name,age
+
+        ArrayList<String> manList = new ArrayList<>();
+        ArrayList<String> womenList = new ArrayList<>();
+        Collections.addAll(manList,"蔡坤坤,24","叶齁咸,23","刘不甜,22","吴签,24","谷嘉,30","肖梁梁,27");
+        Collections.addAll(womenList,"赵小颖,35","杨颖,36","高元元,43","张天天,31","刘诗,35","杨小幂,33");
+
+        Stream<String> manActors = manList.stream().filter(x->x.split(",")[0].length() == 3).limit(2);
+        Stream<String> womanActors = womenList.stream().filter(x->x.split(",")[0].startsWith("杨")).skip(1);
+//
+        List<Actor> actors = Stream.concat(manActors,womanActors)
+                .map(x->new Actor(x.split(",")[0],Integer.valueOf(x.split(",")[1]))).collect(Collectors.toList());
+        System.out.println("actors:" + actors);
     }
 
 }
